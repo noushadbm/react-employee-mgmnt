@@ -3,3 +3,8 @@ h1 {
   margin: 0 0 20px;
   color: #1a5276;
 }
+
+.title {
+    display: flex;
+    justify-content: space-between;
+}
