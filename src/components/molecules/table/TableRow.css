@@ -1,0 +1,11 @@
+.action-panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.action-panel > a {
+    width: 50px;
+    height: 20px;
+    text-align: center;
+}
