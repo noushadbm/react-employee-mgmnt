@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import "./EmployeeAddEditPage.css";
 import MainHeading from "../../atoms/MainHeading/MainHeading";
 import Input from "../../atoms/Input/Input";
@@ -6,6 +7,11 @@ import Select from "../../atoms/Select/Select";
 import SubmitButton from "../../atoms/Button/SubmitButton";
 
 const EmployeeAddEditPage = (props) => {
+  const { state } = useLocation();
+  useEffect(() => {
+    console.log("state:", state);
+  }, []);
+  
   const departments = [
     { value: "", name: "Select a department" },
     { value: "Marketing", name: "Marketing" },
@@ -14,7 +20,11 @@ const EmployeeAddEditPage = (props) => {
   ];
   return (
     <div className="container">
-      <MainHeading>Employee Add page.</MainHeading>
+      <MainHeading title="Employee Add page.">
+        <Link className="link-style" to="/">
+          Back
+        </Link>
+      </MainHeading>
       <form action="" method="post">
         <Input name="empName" displayLabel="Name" required={true} />
         <Select

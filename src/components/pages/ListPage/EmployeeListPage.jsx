@@ -1,10 +1,11 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./EmployeeListPage.css";
 import MainHeading from "../../atoms/MainHeading/MainHeading";
 import MainTable from "../../molecules/table/MainTable";
-import Button from "../../atoms/Button/Button";
 
 const EmployeeListPage = (props) => {
+  const navigate = useNavigate();
   const attributeNames = [
     "id",
     "name",
@@ -48,15 +49,24 @@ const EmployeeListPage = (props) => {
       salary: "5000",
     },
   ];
+
+  const onEdit = (index) => {
+    //console.log("-----> edit clicked:", employees[index]);
+    navigate("/add", { replace: true, state: { employee: employees[index] } });
+  };
+
   return (
     <div className="container">
       <MainHeading title="Employee Management System">
-        <Button>Add Employee</Button>
+        <Link className="link-style" to="/add">
+          Add Employee
+        </Link>
       </MainHeading>
       <MainTable
         attributeNames={attributeNames}
         columns={columns}
         items={employees}
+        onEdit={onEdit}
       ></MainTable>
     </div>
   );

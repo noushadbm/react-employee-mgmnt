@@ -4,7 +4,7 @@ import TableHead from "./TableHead";
 import TableRow from "./TableRow";
 
 const MainTable = (props) => {
-  const { attributeNames, columns, items } = props;
+  const { attributeNames, columns, items, onEdit } = props;
 
   return (
     <table>
@@ -16,6 +16,7 @@ const MainTable = (props) => {
               key={index}
               item={item}
               attributeNames={attributeNames}
+              onEdit={() => onEdit(index)}
             ></TableRow>
           );
         })}
