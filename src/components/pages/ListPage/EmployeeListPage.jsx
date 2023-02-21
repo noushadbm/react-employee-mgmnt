@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./EmployeeListPage.css";
 import MainHeading from "../../atoms/MainHeading/MainHeading";
@@ -6,6 +6,27 @@ import MainTable from "../../molecules/table/MainTable";
 
 const EmployeeListPage = (props) => {
   const navigate = useNavigate();
+  const [employees, setEmployees] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      return await fetch("http://localhost:8080/api/v1/employees");
+    };
+
+    fetchData()
+      .then((response) => response.json())
+      .then((fetchedEmployees) => {
+        const allEmployees = fetchedEmployees.map((fetchedEmployee) => {
+          return {
+            id: fetchedEmployee.id,
+            name: fetchedEmployee.firstName + " " + fetchedEmployee.lastName,
+            email: fetchedEmployee.emailId,
+          };
+        });
+        setEmployees(allEmployees);
+      });
+  }, []);
+
   const attributeNames = [
     "id",
     "name",
@@ -22,32 +43,6 @@ const EmployeeListPage = (props) => {
     "Position",
     "Salary",
     "Actions",
-  ];
-  const employees = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "rambo@test.com",
-      department: "Marketing",
-      position: "Manager",
-      salary: "80000",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "smit@test.com",
-      department: "Human Resources",
-      position: "Coordinator",
-      salary: "50000",
-    },
-    {
-      id: 3,
-      name: "Bob Johnson",
-      email: "-",
-      department: "Accounting",
-      position: "Accountant",
-      salary: "5000",
-    },
   ];
 
   const onEdit = (index) => {

@@ -1,4 +1,4 @@
-import React, { PropTypes } from "react";
+import React from "react";
 import "./Input.css";
 
 const Input = (props) => {
@@ -29,7 +29,5 @@ Input.defaultProps = {
   type: "text",
   onChange: () => {},
 };
-
-Input.propTypes = {};
 
 export default Input;

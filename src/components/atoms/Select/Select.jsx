@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./Select.css";
 
 const Select = (props) => {
@@ -29,7 +29,5 @@ const Select = (props) => {
     </>
   );
 };
-
-Select.defaultProps = {};
 
 export default Select;
