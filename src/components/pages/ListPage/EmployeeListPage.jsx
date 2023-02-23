@@ -10,7 +10,9 @@ const EmployeeListPage = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      return await fetch("http://localhost:8080/api/v1/employees");
+      return await fetch("http://localhost:8080/api/v1/employees", {
+        credentials: 'include'
+      });
     };
 
     fetchData()

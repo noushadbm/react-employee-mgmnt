@@ -2,7 +2,7 @@ import React from "react";
 import "./SubmitButton.css";
 
 const SubmitButton = (props) => {
-  const { children } = props;
+  const { children, onSubmit } = props;
   return <button type="submit">{children}</button>;
 };
 
