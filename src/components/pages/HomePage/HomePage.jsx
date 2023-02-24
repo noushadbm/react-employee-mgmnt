@@ -6,13 +6,13 @@ const HomePage = (props) => {
   const [userRole, setUserRole] = useState([]);
   useEffect(() => {
     const fetchRoles = async () => {
-      return await fetch("http://localhost:8080/api/v1/userRoles");
+      return await fetch("http://localhost:8080/ui/userRoles");
     };
 
     fetchRoles()
       .then((response) => response.json())
       .then((roles) => {
-        console.log("---- roles:", roles);
+        // console.log("---- roles:", roles);
         setUserRole(roles[0]);
       })
       .catch((error) => {

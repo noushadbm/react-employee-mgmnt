@@ -5,20 +5,32 @@ import MainHeading from "../../atoms/MainHeading/MainHeading";
 import Input from "../../atoms/Input/Input";
 import Select from "../../atoms/Select/Select";
 import SubmitButton from "../../atoms/Button/SubmitButton";
+import { DEPARTMENT_OPTIONS } from "../../common/Constants";
 
 const EmployeeAddEditPage = (props) => {
+  const departments = [
+    { value: "", name: "Select Department" },
+    ...DEPARTMENT_OPTIONS,
+  ];
+
   const { state } = useLocation();
+  const [employeeNumber, setEmployeeNumber] = useState();
   const [employeeName, setEmployeeName] = useState();
   const [employeeDept, setEmployeeDept] = useState();
-  const [employeePostiion, setEmployeePostiion] = useState();
-  const [employeeSalary, setEmployeeSalary] = useState();
+  const [employeeDateOfJoining, setEmployeeDateOfJoining] = useState();
+  const [sal, setSal] = useState();
   useEffect(() => {
     console.log("state:", state);
-    setEmployeeName(state?.employee?.name);
-    setEmployeeDept(state?.employee?.department);
-    setEmployeePostiion(state?.employee?.position);
-    setEmployeeSalary(state?.employee?.salary);
+    // setEmployeeName(state?.employee?.name);
+    // setEmployeeDept(state?.employee?.department);
+    // setEmployeeDateOfJoining(state?.employee?.position);
+    // setEmployeeSalary(state?.employee?.salary);
   }, []);
+
+  const onEmpNumberChange = (value) => {
+    console.log('number change:', value);
+    setEmployeeNumber(value);
+  };
 
   const onEmpNameChange = (value) => {
     setEmployeeName(value);
@@ -28,12 +40,52 @@ const EmployeeAddEditPage = (props) => {
     setEmployeeDept(value);
   };
 
-  const departments = [
-    { value: "", name: "Select a department" },
-    { value: "Marketing", name: "Marketing" },
-    { value: "Human Resources", name: "Human Resources" },
-    { value: "Accounting", name: "Accounting" },
-  ];
+  const onDateOfJoiningChange = (value) => {
+    setEmployeeDateOfJoining(value);
+  }
+
+  const onSalChange = (val) => {
+    console.log('Sal change:', val);
+    setSal(val);
+  }
+
+  const createEmployeeRecord = (e) => {
+    e.preventDefault();
+    console.log("About to submit");
+
+    const callCreateUserApi = async () => {
+      // const obj = {};
+      // obj['empName'] = employeeName;
+      console.log("employeeName:", employeeName);
+      console.log("employeeNumber:", employeeNumber);
+      console.log("employeeDateOfJoining:", employeeDateOfJoining);
+      console.log("employeeDept:", employeeDept);
+      console.log("employeeSalary:", sal);
+
+      const requestBody = {
+        empName: employeeName,
+        empNumber: +employeeNumber,
+        dateOfJoining: employeeDateOfJoining,
+        department: employeeDept,
+        salary: sal && +sal,
+      };
+      console.log("body:", requestBody);
+      return await fetch("http://localhost:8080/api/v1/employees", {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      });
+    };
+
+    callCreateUserApi()
+      .then((response) => {
+        console.log("response.status:", response.status);
+      })
+      .catch((error) => {
+        console.log("Create user failure:", error);
+      });
+  };
+
   return (
     <div className="container">
       <MainHeading title="Employee Add page.">
@@ -41,13 +93,28 @@ const EmployeeAddEditPage = (props) => {
           Back
         </Link>
       </MainHeading>
-      <form action="" method="post">
+      <form onSubmit={createEmployeeRecord}>
+        <Input
+          name="empNumber"
+          displayLabel="Emp Number"
+          required={true}
+          value={employeeNumber}
+          type="number"
+          onChange={onEmpNumberChange}
+        />
         <Input
           name="empName"
-          displayLabel="Name"
+          displayLabel="Emp Name"
           required={true}
           value={employeeName}
           onChange={onEmpNameChange}
+        />
+        <Input
+          name="dateOfJoining"
+          displayLabel="Date of Joining (dd-MM-yyyy)"
+          required={false}
+          value={employeeDateOfJoining}
+          onChange={onDateOfJoiningChange}
         />
         <Select
           name="department"
@@ -58,17 +125,12 @@ const EmployeeAddEditPage = (props) => {
           onValueChange={onDepartmentChange}
         />
         <Input
-          name="empPosition"
-          displayLabel="Positon"
-          required={false}
-          value={employeePostiion}
-        />
-        <Input
-          name="empSalary"
-          displayLabel="Salary"
-          required={false}
+          name="salary"
+          displayLabel="Emp Salary"
+          required={true}
+          value={sal}
           type="number"
-          value={employeeSalary}
+          onChange={onSalChange}
         />
         <SubmitButton>Add Employee</SubmitButton>
       </form>
