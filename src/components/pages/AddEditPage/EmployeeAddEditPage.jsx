@@ -7,6 +7,9 @@ import Select from "../../atoms/Select/Select";
 import SubmitButton from "../../atoms/Button/SubmitButton";
 import { DEPARTMENT_OPTIONS } from "../../common/Constants";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const EmployeeAddEditPage = (props) => {
   const departments = [
     { value: "", name: "Select Department" },
@@ -80,6 +83,12 @@ const EmployeeAddEditPage = (props) => {
     callCreateUserApi()
       .then((response) => {
         console.log("response.status:", response.status);
+        if(response.status === 200) {
+          toast("Employee Record succesfully created!");
+        } else {
+          console.log("response:", response);
+          toast("Failed to create employee record!");
+        }
       })
       .catch((error) => {
         console.log("Create user failure:", error);
@@ -134,6 +143,7 @@ const EmployeeAddEditPage = (props) => {
         />
         <SubmitButton>Add Employee</SubmitButton>
       </form>
+      <ToastContainer />
     </div>
   );
 };
