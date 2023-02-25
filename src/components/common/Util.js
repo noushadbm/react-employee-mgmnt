@@ -4,7 +4,7 @@ const getNameForValue = (value, array) => {
       return element["value"] === value;
     });
 
-    return found["name"];
+    return found ? found["name"] : "";
   }
 };
 

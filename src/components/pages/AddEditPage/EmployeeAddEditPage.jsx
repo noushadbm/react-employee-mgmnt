@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./EmployeeAddEditPage.css";
 import MainHeading from "../../atoms/MainHeading/MainHeading";
@@ -7,8 +7,8 @@ import Select from "../../atoms/Select/Select";
 import SubmitButton from "../../atoms/Button/SubmitButton";
 import { DEPARTMENT_OPTIONS } from "../../common/Constants";
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EmployeeAddEditPage = (props) => {
   const departments = [
@@ -17,6 +17,7 @@ const EmployeeAddEditPage = (props) => {
   ];
 
   const { state } = useLocation();
+  const ref = useRef();
   const [employeeNumber, setEmployeeNumber] = useState();
   const [employeeName, setEmployeeName] = useState();
   const [employeeDept, setEmployeeDept] = useState();
@@ -28,10 +29,9 @@ const EmployeeAddEditPage = (props) => {
     // setEmployeeDept(state?.employee?.department);
     // setEmployeeDateOfJoining(state?.employee?.position);
     // setEmployeeSalary(state?.employee?.salary);
-  }, []);
+  });
 
   const onEmpNumberChange = (value) => {
-    console.log('number change:', value);
     setEmployeeNumber(value);
   };
 
@@ -45,26 +45,25 @@ const EmployeeAddEditPage = (props) => {
 
   const onDateOfJoiningChange = (value) => {
     setEmployeeDateOfJoining(value);
-  }
+  };
 
   const onSalChange = (val) => {
-    console.log('Sal change:', val);
     setSal(val);
-  }
+  };
+
+  const resetForm = () => {
+    setEmployeeNumber('');
+    setEmployeeName('');
+    setEmployeeDept('');
+    setEmployeeDateOfJoining(null);
+    setSal();
+  };
 
   const createEmployeeRecord = (e) => {
     e.preventDefault();
     console.log("About to submit");
 
     const callCreateUserApi = async () => {
-      // const obj = {};
-      // obj['empName'] = employeeName;
-      console.log("employeeName:", employeeName);
-      console.log("employeeNumber:", employeeNumber);
-      console.log("employeeDateOfJoining:", employeeDateOfJoining);
-      console.log("employeeDept:", employeeDept);
-      console.log("employeeSalary:", sal);
-
       const requestBody = {
         empName: employeeName,
         empNumber: +employeeNumber,
@@ -72,7 +71,7 @@ const EmployeeAddEditPage = (props) => {
         department: employeeDept,
         salary: sal && +sal,
       };
-      console.log("body:", requestBody);
+      // console.log("body:", requestBody);
       return await fetch("http://localhost:8080/api/v1/employees", {
         method: "post",
         headers: { "Content-Type": "application/json" },
@@ -83,11 +82,13 @@ const EmployeeAddEditPage = (props) => {
     callCreateUserApi()
       .then((response) => {
         console.log("response.status:", response.status);
-        if(response.status === 200) {
-          toast("Employee Record succesfully created!");
+        if (response.status === 200) {
+          resetForm();
+          ref.current.reset();
+          toast("Employee Record succesfully created!", {type: 'success'});
         } else {
           console.log("response:", response);
-          toast("Failed to create employee record!");
+          toast("Failed to create employee record!", {type: 'error'});
         }
       })
       .catch((error) => {
@@ -102,7 +103,7 @@ const EmployeeAddEditPage = (props) => {
           Back
         </Link>
       </MainHeading>
-      <form onSubmit={createEmployeeRecord}>
+      <form onSubmit={createEmployeeRecord} ref={ref}>
         <Input
           name="empNumber"
           displayLabel="Emp Number"

@@ -10,28 +10,21 @@ const EmployeeListPage = (props) => {
   const navigate = useNavigate();
   const [employees, setEmployees] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      return await fetch("http://localhost:8080/api/v1/employees");
-    };
+  const fetchData = async () => {
+    return await fetch("http://localhost:8080/api/v1/employees");
+  };
 
+  const deleteData = async (employeeId) => {
+    return await fetch("http://localhost:8080/api/v1/employees/" + employeeId, {
+      method: "delete",
+    });
+  };
+
+  useEffect(() => {
     fetchData()
       .then((response) => response.json())
       .then((fetchedEmployees) => {
-        const allEmployees = fetchedEmployees.map((fetchedEmployee) => {
-          return {
-            id: fetchedEmployee.id,
-            empNumber: fetchedEmployee.empNumber,
-            empName: fetchedEmployee.empName,
-            dateOfJoining: fetchedEmployee.dateOfJoining,
-            department: getNameForValue(
-              fetchedEmployee.department,
-              DEPARTMENT_OPTIONS
-            ),
-            salary: fetchedEmployee.salary,
-          };
-        });
-        setEmployees(allEmployees);
+        updateTable(fetchedEmployees, setEmployees);
       });
   }, []);
 
@@ -58,6 +51,19 @@ const EmployeeListPage = (props) => {
     navigate("/add", { replace: true, state: { employee: employees[index] } });
   };
 
+  const onDelete = (index) => {
+    const employeeIdToDelete = employees[index]["id"];
+    console.log("--- employeeIdToDelete:", employeeIdToDelete);
+    // Delete record and then fetch the updated list.
+    deleteData(employeeIdToDelete).then(() => {
+      fetchData()
+        .then((response) => response.json())
+        .then((fetchedEmployees) => {
+          updateTable(fetchedEmployees, setEmployees);
+        });
+    });
+  };
+
   return (
     <div className="container">
       <MainHeading title="Employee Management System">
@@ -73,9 +79,27 @@ const EmployeeListPage = (props) => {
         columns={columns}
         items={employees}
         onEdit={onEdit}
+        onDelete={onDelete}
       ></MainTable>
     </div>
   );
 };
 
 export default EmployeeListPage;
+
+function updateTable(fetchedEmployees, setEmployees) {
+  const allEmployees = fetchedEmployees.map((fetchedEmployee) => {
+    return {
+      id: fetchedEmployee.id,
+      empNumber: fetchedEmployee.empNumber,
+      empName: fetchedEmployee.empName,
+      dateOfJoining: fetchedEmployee.dateOfJoining,
+      department: getNameForValue(
+        fetchedEmployee.department,
+        DEPARTMENT_OPTIONS
+      ),
+      salary: fetchedEmployee.salary,
+    };
+  });
+  setEmployees(allEmployees);
+}
