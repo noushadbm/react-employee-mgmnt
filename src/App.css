@@ -10,3 +10,14 @@ body {
   height: 20px;
   text-align: center;
 }
+
+.navigation-panel{
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+.logout {
+  margin: 10px;
+  background-color: gray;
+}

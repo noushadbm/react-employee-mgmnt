@@ -5,6 +5,7 @@ import MainHeading from "../../atoms/MainHeading/MainHeading";
 import MainTable from "../../molecules/table/MainTable";
 import { DEPARTMENT_OPTIONS } from "../../common/Constants";
 import { getNameForValue } from "../../common/Util";
+import { ToastContainer, toast } from "react-toastify";
 
 const EmployeeListPage = (props) => {
   const navigate = useNavigate();
@@ -56,6 +57,7 @@ const EmployeeListPage = (props) => {
     console.log("--- employeeIdToDelete:", employeeIdToDelete);
     // Delete record and then fetch the updated list.
     deleteData(employeeIdToDelete).then(() => {
+      toast("Employee record succesfully deleted!", {type: 'success'});
       fetchData()
         .then((response) => response.json())
         .then((fetchedEmployees) => {
@@ -81,6 +83,7 @@ const EmployeeListPage = (props) => {
         onEdit={onEdit}
         onDelete={onDelete}
       ></MainTable>
+      <ToastContainer />
     </div>
   );
 };

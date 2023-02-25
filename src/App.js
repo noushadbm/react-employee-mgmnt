@@ -6,13 +6,27 @@ import EmployeeAddEditPage from "./components/pages/AddEditPage/EmployeeAddEditP
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route exact path="/" element={<HomePage />}></Route>
-        <Route path="/list" element={<EmployeeListPage />} />
-        <Route path="/add" element={<EmployeeAddEditPage />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <div className="navigation-panel">
+        <a
+          className="logout"
+          href="http://localhost:8080/logout"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Logout
+        </a>
+      </div>
+      <div>
+        <BrowserRouter>
+          <Routes>
+            <Route exact path="/" element={<HomePage />}></Route>
+            <Route path="/list" element={<EmployeeListPage />} />
+            <Route path="/add" element={<EmployeeAddEditPage />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </>
   );
 }
 
