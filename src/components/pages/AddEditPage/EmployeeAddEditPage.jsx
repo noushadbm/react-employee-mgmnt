@@ -118,6 +118,7 @@ const EmployeeAddEditPage = (props) => {
           required={true}
           value={employeeName}
           onChange={onEmpNameChange}
+          pattern="[A-Za-z ]*"
         />
         <Input
           name="dateOfJoining"

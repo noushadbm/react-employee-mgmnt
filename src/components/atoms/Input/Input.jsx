@@ -2,7 +2,7 @@ import React from "react";
 import "./Input.css";
 
 const Input = (props) => {
-  const { required, name, displayLabel, type, value, onChange } = props;
+  const { required, name, displayLabel, type, value, onChange, pattern } = props;
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -19,6 +19,7 @@ const Input = (props) => {
         required={required}
         defaultValue={value}
         onChange={handleChange}
+        pattern={pattern}
       ></input>
     </>
   );
