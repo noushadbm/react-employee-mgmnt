@@ -20,15 +20,15 @@ const TableRow = (props) => {
 
 const getAsList = (items) => {
   return (
-    <span>
+    <ul>
       {items.map((item, index) => {
         return (
-          <span key={index}>
-            {item.key}:{item.value?item.value:'-'}{', '}
-          </span>
+          <li key={index}>
+            {item.key}:{item.value?item.value:'-'}
+          </li>
         );
       })}
-    </span>
+    </ul>
   );
 };
 

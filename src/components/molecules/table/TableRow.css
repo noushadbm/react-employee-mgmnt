@@ -7,4 +7,6 @@
 .action-panel > a {
     text-align: center;
     vertical-align: middle;
+    margin-top: 27px;
+    margin-bottom: 27px;
 }
