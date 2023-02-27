@@ -16,4 +16,17 @@ const getFormatedDate = (date) => {
   }-${date.getFullYear()}`;
 };
 
-export { getNameForValue, getFormatedDate };
+// Convert dd-MM-yyyy to yyyy-MM-dd
+const convertDateToISO = (dateString) => {
+  if (dateString) {
+    const arr = dateString.split("-");
+    let tmp = arr[2];
+    arr[2] = arr[0];
+    arr[0] = tmp;
+
+    return `${arr[0]}-${arr[1]}-${arr[2]}`;
+  }
+  return dateString;
+};
+
+export { getNameForValue, getFormatedDate, convertDateToISO };

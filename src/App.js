@@ -23,6 +23,7 @@ function App() {
             <Route exact path="/" element={<HomePage />}></Route>
             <Route path="/list" element={<EmployeeListPage />} />
             <Route path="/add" element={<EmployeeAddEditPage />} />
+            <Route path="/edit" element={<EmployeeAddEditPage />} />
           </Routes>
         </BrowserRouter>
       </div>

@@ -2,7 +2,7 @@ import React from "react";
 import "./TableRow.css";
 
 const TableRow = (props) => {
-  const { item, attributeNames, onDelete } = props;
+  const { item, attributeNames, onDelete, onEdit } = props;
   return (
     <tr>
       {attributeNames.map((attributeName, index) => {
@@ -12,6 +12,9 @@ const TableRow = (props) => {
       <td className="action-panel">
         <a onClick={onDelete} href="#">
           Delete
+        </a>
+        <a onClick={onEdit} href="#">
+          Edit
         </a>
       </td>
     </tr>

@@ -9,6 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 const EmployeeListPage = (props) => {
   const navigate = useNavigate();
+  const [originalEmployees, setOriginalEmployees] = useState([]);
   const [employees, setEmployees] = useState([]);
 
   const fetchData = async () => {
@@ -25,7 +26,7 @@ const EmployeeListPage = (props) => {
     fetchData()
       .then((response) => response.json())
       .then((fetchedEmployees) => {
-        updateTable(fetchedEmployees, setEmployees);
+        updateTable(fetchedEmployees, setEmployees, setOriginalEmployees);
       });
   }, []);
 
@@ -50,20 +51,21 @@ const EmployeeListPage = (props) => {
   ];
 
   const onEdit = (index) => {
-    //console.log("-----> edit clicked:", employees[index]);
-    navigate("/add", { replace: true, state: { employee: employees[index] } });
+    navigate("/edit", {
+      replace: true,
+      state: { employee: originalEmployees[index] },
+    });
   };
 
   const onDelete = (index) => {
     const employeeIdToDelete = employees[index]["id"];
-    console.log("--- employeeIdToDelete:", employeeIdToDelete);
     // Delete record and then fetch the updated list.
     deleteData(employeeIdToDelete).then(() => {
       toast("Employee record succesfully deleted!", { type: "success" });
       fetchData()
         .then((response) => response.json())
         .then((fetchedEmployees) => {
-          updateTable(fetchedEmployees, setEmployees);
+          updateTable(fetchedEmployees, setEmployees, setOriginalEmployees);
         });
     });
   };
@@ -98,7 +100,7 @@ function convertToKeyValues(contactInfos) {
   });
 }
 
-function updateTable(fetchedEmployees, setEmployees) {
+function updateTable(fetchedEmployees, setEmployees, setOriginalEmployees) {
   const allEmployees = fetchedEmployees.map((fetchedEmployee) => {
     return {
       id: fetchedEmployee.id,
@@ -114,4 +116,17 @@ function updateTable(fetchedEmployees, setEmployees) {
     };
   });
   setEmployees(allEmployees);
+
+  const allOriginalEmployees = fetchedEmployees.map((fetchedEmployee) => {
+    return {
+      id: fetchedEmployee.id,
+      empNumber: fetchedEmployee.empNumber,
+      empName: fetchedEmployee.empName,
+      dateOfJoining: fetchedEmployee.dateOfJoining,
+      department: fetchedEmployee.department,
+      salary: fetchedEmployee.salary,
+      contactInfos: fetchedEmployee.contactInfos,
+    };
+  });
+  setOriginalEmployees(allOriginalEmployees);
 }

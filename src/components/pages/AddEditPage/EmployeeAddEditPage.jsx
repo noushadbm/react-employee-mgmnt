@@ -5,7 +5,7 @@ import MainHeading from "../../atoms/MainHeading/MainHeading";
 import Input from "../../atoms/Input/Input";
 import Select from "../../atoms/Select/Select";
 import SubmitButton from "../../atoms/Button/SubmitButton";
-import { getFormatedDate } from "../../common/Util";
+import { getFormatedDate, convertDateToISO } from "../../common/Util";
 import { DEPARTMENT_OPTIONS } from "../../common/Constants";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -20,12 +20,11 @@ const EmployeeAddEditPage = (props) => {
     ...DEPARTMENT_OPTIONS,
   ];
 
-  const { state } = useLocation();
+  const { state, pathname } = useLocation();
   const ref = useRef();
   const [employeeNumber, setEmployeeNumber] = useState();
   const [employeeName, setEmployeeName] = useState();
   const [employeeDept, setEmployeeDept] = useState();
-  //const [employeeDateOfJoining, setEmployeeDateOfJoining] = useState();
   const [sal, setSal] = useState();
 
   const [resNumber, setResNumber] = useState();
@@ -34,11 +33,13 @@ const EmployeeAddEditPage = (props) => {
   const [dateOfJoining, setDateOfJoining] = useState(new Date());
   useEffect(() => {
     console.log("state:", state);
-    // setEmployeeName(state?.employee?.name);
-    // setEmployeeDept(state?.employee?.department);
-    // setEmployeeDateOfJoining(state?.employee?.position);
-    // setEmployeeSalary(state?.employee?.salary);
-  });
+    setEmployeeName(state?.employee?.empName);
+    setEmployeeNumber(state?.employee?.empNumber);
+    setEmployeeDept(state?.employee?.department);
+    let isoDate = convertDateToISO(state?.employee?.dateOfJoining);
+    setDateOfJoining(isoDate ? new Date(isoDate) : new Date());
+    setSal(state?.employee?.salary);
+  }, []);
 
   const onEmpNumberChange = (value) => {
     setEmployeeNumber(value);
@@ -81,10 +82,8 @@ const EmployeeAddEditPage = (props) => {
 
   const createEmployeeRecord = (e) => {
     e.preventDefault();
-    console.log("About to submit");
 
     const callCreateUserApi = async () => {
-      console.log("dateOfJoining:", getFormatedDate(dateOfJoining));
       const requestBody = {
         empName: employeeName,
         empNumber: +employeeNumber,
@@ -134,10 +133,11 @@ const EmployeeAddEditPage = (props) => {
       });
   };
 
+  const prevLocation = pathname === "/edit" ? "/list" : "/";
   return (
     <div className="container">
       <MainHeading title="Employee Add page.">
-        <Link className="link-style" to="/">
+        <Link className="link-style" to={prevLocation}>
           Back
         </Link>
       </MainHeading>

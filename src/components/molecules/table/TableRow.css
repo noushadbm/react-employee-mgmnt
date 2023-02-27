@@ -1,12 +1,12 @@
 .action-panel {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
 }
 
 .action-panel > a {
     text-align: center;
     vertical-align: middle;
-    margin-top: 27px;
-    margin-bottom: 27px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
