@@ -8,4 +8,12 @@ const getNameForValue = (value, array) => {
   }
 };
 
-export { getNameForValue };
+const getFormatedDate = (date) => {
+  const dateNumber = date.getDate();
+  const monthNumber = date.getMonth() + 1;
+  return `${dateNumber < 10 ? "0" + dateNumber : dateNumber}-${
+    monthNumber < 10 ? "0" + monthNumber : monthNumber
+  }-${date.getFullYear()}`;
+};
+
+export { getNameForValue, getFormatedDate };

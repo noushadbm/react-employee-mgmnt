@@ -5,10 +5,14 @@ import MainHeading from "../../atoms/MainHeading/MainHeading";
 import Input from "../../atoms/Input/Input";
 import Select from "../../atoms/Select/Select";
 import SubmitButton from "../../atoms/Button/SubmitButton";
+import { getFormatedDate } from "../../common/Util";
 import { DEPARTMENT_OPTIONS } from "../../common/Constants";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const EmployeeAddEditPage = (props) => {
   const departments = [
@@ -21,12 +25,13 @@ const EmployeeAddEditPage = (props) => {
   const [employeeNumber, setEmployeeNumber] = useState();
   const [employeeName, setEmployeeName] = useState();
   const [employeeDept, setEmployeeDept] = useState();
-  const [employeeDateOfJoining, setEmployeeDateOfJoining] = useState();
+  //const [employeeDateOfJoining, setEmployeeDateOfJoining] = useState();
   const [sal, setSal] = useState();
 
   const [resNumber, setResNumber] = useState();
   const [officeNumber, setOfficeNumber] = useState();
   const [intlNumber, setIntlNumber] = useState();
+  const [dateOfJoining, setDateOfJoining] = useState(new Date());
   useEffect(() => {
     console.log("state:", state);
     // setEmployeeName(state?.employee?.name);
@@ -45,10 +50,6 @@ const EmployeeAddEditPage = (props) => {
 
   const onDepartmentChange = (value) => {
     setEmployeeDept(value);
-  };
-
-  const onDateOfJoiningChange = (value) => {
-    setEmployeeDateOfJoining(value);
   };
 
   const onSalChange = (val) => {
@@ -71,7 +72,7 @@ const EmployeeAddEditPage = (props) => {
     setEmployeeNumber("");
     setEmployeeName("");
     setEmployeeDept("");
-    setEmployeeDateOfJoining(null);
+    setDateOfJoining(new Date());
     setSal();
     setResNumber();
     setOfficeNumber();
@@ -83,10 +84,11 @@ const EmployeeAddEditPage = (props) => {
     console.log("About to submit");
 
     const callCreateUserApi = async () => {
+      console.log("dateOfJoining:", getFormatedDate(dateOfJoining));
       const requestBody = {
         empName: employeeName,
         empNumber: +employeeNumber,
-        dateOfJoining: employeeDateOfJoining,
+        dateOfJoining: getFormatedDate(dateOfJoining),
         department: employeeDept,
         salary: sal && +sal,
         contactInfos: [
@@ -120,8 +122,11 @@ const EmployeeAddEditPage = (props) => {
           ref.current.reset();
           toast("Employee Record succesfully created!", { type: "success" });
         } else {
-          console.log("response:", response);
-          toast("Failed to create employee record!", { type: "error" });
+          response.text().then((text) => {
+            const errorMsgBody = JSON.parse(text);
+            console.log("response:", errorMsgBody.message);
+            toast(errorMsgBody.message, { type: "error" });
+          });
         }
       })
       .catch((error) => {
@@ -155,13 +160,13 @@ const EmployeeAddEditPage = (props) => {
           pattern="[A-Za-z ]*"
           maxLength={100}
         />
-        <Input
+        <label htmlFor="dateOfJoining">Date of joining</label>
+        <DatePicker
           name="dateOfJoining"
-          displayLabel="Date of Joining (dd-MM-yyyy)"
-          required={false}
-          value={employeeDateOfJoining}
-          onChange={onDateOfJoiningChange}
-          maxLength={10}
+          selected={dateOfJoining}
+          onChange={(date) => setDateOfJoining(date)}
+          dateFormat="dd-MM-yyyy"
+          dateFormatCalendar="dd-MM-yyyy"
         />
         <Select
           name="department"
@@ -209,7 +214,6 @@ const EmployeeAddEditPage = (props) => {
           maxLength={20}
         />
         <SubmitButton>Add Employee</SubmitButton>
-        
       </form>
       <ToastContainer />
     </div>
