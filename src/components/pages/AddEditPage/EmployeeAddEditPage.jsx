@@ -209,6 +209,7 @@ const EmployeeAddEditPage = (props) => {
           maxLength={20}
         />
         <SubmitButton>Add Employee</SubmitButton>
+        
       </form>
       <ToastContainer />
     </div>
