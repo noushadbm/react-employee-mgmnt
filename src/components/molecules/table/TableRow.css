@@ -5,7 +5,6 @@
 }
 
 .action-panel > a {
-    width: 50px;
-    height: 20px;
     text-align: center;
+    vertical-align: middle;
 }

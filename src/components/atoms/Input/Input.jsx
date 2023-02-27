@@ -2,7 +2,7 @@ import React from "react";
 import "./Input.css";
 
 const Input = (props) => {
-  const { required, name, displayLabel, type, value, onChange, pattern } = props;
+  const { required, name, displayLabel, type, value, onChange, pattern, maxLength } = props;
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -20,6 +20,7 @@ const Input = (props) => {
         defaultValue={value}
         onChange={handleChange}
         pattern={pattern}
+        maxLength={maxLength}
       ></input>
     </>
   );
@@ -29,6 +30,7 @@ Input.defaultProps = {
   required: false,
   type: "text",
   onChange: () => {},
+  maxLength: 10,
 };
 
 export default Input;

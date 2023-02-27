@@ -36,6 +36,7 @@ const EmployeeListPage = (props) => {
     "dateOfJoining",
     "department",
     "salary",
+    "contactInfos",
   ];
   const columns = [
     "ID",
@@ -44,6 +45,7 @@ const EmployeeListPage = (props) => {
     "Date of Joining",
     "Department",
     "Salary",
+    "Contact Numbers",
     "Actions",
   ];
 
@@ -57,7 +59,7 @@ const EmployeeListPage = (props) => {
     console.log("--- employeeIdToDelete:", employeeIdToDelete);
     // Delete record and then fetch the updated list.
     deleteData(employeeIdToDelete).then(() => {
-      toast("Employee record succesfully deleted!", {type: 'success'});
+      toast("Employee record succesfully deleted!", { type: "success" });
       fetchData()
         .then((response) => response.json())
         .then((fetchedEmployees) => {
@@ -90,6 +92,12 @@ const EmployeeListPage = (props) => {
 
 export default EmployeeListPage;
 
+function convertToKeyValues(contactInfos) {
+  return contactInfos.map((item) => {
+    return { key: item.contactType, value: item.contactNumber };
+  });
+}
+
 function updateTable(fetchedEmployees, setEmployees) {
   const allEmployees = fetchedEmployees.map((fetchedEmployee) => {
     return {
@@ -102,6 +110,7 @@ function updateTable(fetchedEmployees, setEmployees) {
         DEPARTMENT_OPTIONS
       ),
       salary: fetchedEmployee.salary,
+      contactInfos: convertToKeyValues(fetchedEmployee.contactInfos),
     };
   });
   setEmployees(allEmployees);

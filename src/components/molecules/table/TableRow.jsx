@@ -2,16 +2,33 @@ import React from "react";
 import "./TableRow.css";
 
 const TableRow = (props) => {
-  const { item, attributeNames, onEdit, onDelete } = props;
+  const { item, attributeNames, onDelete } = props;
   return (
     <tr>
       {attributeNames.map((attributeName, index) => {
-        return <td key={index}>{item[attributeName]}</td>;
+        const isArray = item[attributeName] instanceof Array;
+        return <td key={index}>{isArray ? getAsList(item[attributeName]) : item[attributeName]}</td>;
       })}
       <td className="action-panel">
-        <a onClick={onDelete} href="#">Delete</a>
+        <a onClick={onDelete} href="#">
+          Delete
+        </a>
       </td>
     </tr>
+  );
+};
+
+const getAsList = (items) => {
+  return (
+    <span>
+      {items.map((item, index) => {
+        return (
+          <span key={index}>
+            {item.key}:{item.value?item.value:'-'}{', '}
+          </span>
+        );
+      })}
+    </span>
   );
 };
 
